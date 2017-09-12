@@ -1,6 +1,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "imageprocessing.h"
 
@@ -51,6 +52,12 @@ imagem abrir_imagem(char *nome_do_arquivo) {
 
 }
 
+void liberar_imagem(imagem *I) {
+  free(I->r);
+  free(I->g);
+  free(I->b);
+}
+
 void salvar_imagem(char *nome_do_arquivo, imagem *I) {
   FIBITMAP *bitmapOut;
   RGBQUAD color;
@@ -74,3 +81,34 @@ void salvar_imagem(char *nome_do_arquivo, imagem *I) {
   FreeImage_Save(FIF_JPEG, bitmapOut, nome_do_arquivo, JPEG_DEFAULT);
 }
 
+imagem brilho_v(imagem I, float fator){
+  for (int i=0; i<I.width; i++) {
+    for (int j=0; j<I.height; j++) {
+     int idx;
+
+     idx = i + (j*I.width);
+     I.r[idx] = I.r[idx]*fator;
+     I.g[idx] = I.g[idx]*fator;
+     I.b[idx] = I.b[idx]*fator;
+
+   }
+ }
+ return I;
+}
+
+float maximo(imagem I){
+  float norma,max;
+  max=0;
+  norma=0;
+  for (int i=0; i<I.width; i++) {
+    for (int j=0; j<I.height; j++) {
+     int idx;
+     idx = i + (j*I.width);
+     norma=sqrt(I.r[idx]*I.r[idx]+I.g[idx]*I.g[idx]+I.b[idx]*I.b[idx]);
+     if(norma>max){
+       max=norma;
+     }
+   }
+ }
+ return max;
+}

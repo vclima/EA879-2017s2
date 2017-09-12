@@ -10,20 +10,33 @@ void yyerror(char *);
 
 
 %%
+"EXIT"|"Exit"|"exit" {
+  return EXIT;
+}
 
 [a-z]  {
         yylval.ival = yytext[0] - 'a';
         return VAR;
        }
+[0-9\.]+ {
+    yylval.fval=atof(yytext);
+    printf("Achei o valor %.2f\n",yylval.fval);
+    return NUMERO;
+}
 
+\*   {
+    return BRILHO_MULT;
+}
+[\\/]   {
+    return BRILHO_DIV;
+}
 
-\" { return ASPA; }
+[\[\]]  {
+    return COLCHETE;
+}
 
 [a-zA-Z0-9\.]+  {
-        for (int i = 0; i < yyleng; i++ )
-          yylval.strval[i] = yytext[i];
-
-        yylval.strval[yyleng] = '\0';
+        strcpy(yylval.strval,yytext);
         printf ("Achei nome: %s\n", yylval.strval);
         return STRING;
        }

@@ -10,9 +10,11 @@ int yylex(void);
 %union {
   char    strval[50];
   int     ival;
+  float   fval;
 }
 %token <strval> STRING
-%token <ival> VAR IGUAL EOL ASPA
+%token <ival> VAR IGUAL EOL BRILHO_MULT BRILHO_DIV COLCHETE EXIT
+%token <fval> NUMERO
 %left SOMA
 
 %%
@@ -28,7 +30,33 @@ EXPRESSAO:
         imagem I = abrir_imagem($3);
         printf("Li imagem %d por %d\n", I.width, I.height);
         salvar_imagem($1, &I);
-                          }
+        liberar_imagem(&I);
+    }
+    |STRING BRILHO_MULT NUMERO{
+      printf("ACHEI BRILHO MULT COM FATOR %.2f\n",$3);
+      imagem I = abrir_imagem($1);
+      I=brilho_v(I,$3);
+      salvar_imagem($1,&I);
+      liberar_imagem(&I);
+    }
+      |STRING BRILHO_DIV NUMERO{
+      printf("ACHEI BRILHO DIV COM FATOR %.2f\n",$3);
+      imagem I = abrir_imagem($1);
+      I=brilho_v(I,1/$3);
+      salvar_imagem($1,&I);
+      liberar_imagem(&I);
+    }
+      |COLCHETE STRING COLCHETE {
+        float max;
+        printf("ACHEI MAXIMO DE %s\n", $2 );
+        imagem I = abrir_imagem($2);
+        max=maximo(I);
+        printf("Maximo de %s: %.2f\n",$2,max );
+    }
+      |EXIT {
+        printf("Saindo\n");
+        return 0;
+      }
 
     ;
 
