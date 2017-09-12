@@ -33,14 +33,14 @@ EXPRESSAO:
         liberar_imagem(&I);
     }
     |STRING BRILHO_MULT NUMERO{
-      printf("ACHEI BRILHO MULT COM FATOR %.2f\n",$3);
+      printf("Modificando o brilho de %s com um fator de %.2f\n",$1,$3);
       imagem I = abrir_imagem($1);
       I=brilho_v(I,$3);
       salvar_imagem($1,&I);
       liberar_imagem(&I);
     }
       |STRING BRILHO_DIV NUMERO{
-      printf("ACHEI BRILHO DIV COM FATOR %.2f\n",$3);
+      printf("Modificando o brilho de %s com um fator de %.2f\n",$1,1/$3);
       imagem I = abrir_imagem($1);
       I=brilho_v(I,1/$3);
       salvar_imagem($1,&I);
@@ -48,7 +48,6 @@ EXPRESSAO:
     }
       |COLCHETE STRING COLCHETE {
         float max;
-        printf("ACHEI MAXIMO DE %s\n", $2 );
         imagem I = abrir_imagem($2);
         max=maximo(I);
         printf("Maximo de %s: %.2f\n",$2,max );
