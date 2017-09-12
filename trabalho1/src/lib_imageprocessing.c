@@ -88,9 +88,17 @@ imagem brilho_v(imagem I, float fator){
 
      idx = i + (j*I.width);
      I.r[idx] = I.r[idx]*fator;
+     if(I.r[idx]>255){
+       I.r[idx]=255;
+     }
      I.g[idx] = I.g[idx]*fator;
+     if(I.g[idx]>255){
+       I.g[idx]=255;
+     }
      I.b[idx] = I.b[idx]*fator;
-
+     if(I.b[idx]>255){
+       I.b[idx]=255;
+     }
    }
  }
  return I;
